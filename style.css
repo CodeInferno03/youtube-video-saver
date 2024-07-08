@@ -1,0 +1,52 @@
+body {
+    font-family: 'Segoe UI', Tahoma, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.5em;
+    width: 30rem;
+}
+
+.content {
+    padding: 20px;
+}
+
+.input-container {
+    margin-bottom: 15px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.checkbox {
+    margin-right: 10px;
+    cursor: pointer;
+}
