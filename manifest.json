@@ -1,20 +1,20 @@
 {
-    "manifest_version": 2,
-    "name": "Todo List Extension",
-    "version": "1.0",
-    "description": "A simple to-do list extension",
-    "permissions": ["storage"],
-    "browser_action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "16": "images/task-list.png",
-        "48": "images/check.png",
-        "128": "images/check-list.png"
-      }
-    },
-    "icons": {
+  "manifest_version": 2,
+  "name": "Todo List Extension",
+  "version": "1.0",
+  "description": "A simple to-do list extension",
+  "permissions": ["storage"],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
       "16": "images/task-list.png",
       "48": "images/check.png",
       "128": "images/check-list.png"
     }
+  },
+  "icons": {
+    "16": "images/task-list.png",
+    "48": "images/check.png",
+    "128": "images/check-list.png"
   }
+}
