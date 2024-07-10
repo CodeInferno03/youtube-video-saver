@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Take Note of Your Tasks</title>
+        <title>YouTube Video Saver</title>
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
 
     <body>
+        <!-- Function to redirect someone to a specific link -->
         <div class="header">
-            <h1>Take Note of Your Tasks</h1>
+            <h1>YouTube Video Saver</h1>
         </div>
         <div class="content">
-            <div class="input_container">
-                <input type="text" id="taskInput" placeholder="Add a task..." />
-            </div>
-            <ul id="todoList"></ul>
+            
+            <ul id="videoList">
+                <span onclick="redirect(`www.youtube.com/watch?v=dQw4w9WgXcQ`)">
+                        <li>
+                            Click me! :D
+                        </li>
+                </span>
+                <span onclick="redirect(`www.youtube.com/watch?v=YQHsXMglC9A`)">
+                    <li>
+                        Or me :D
+                    </li>
+                </span>
+            </ul>
+            <span onclick="redirect(`www.youtube.com/watch?v=u7JMhVI7taQ`)">
+                <p>Hello World</p>
+            </span>
+            
         </div>
 
-        <script src="popup.js"></script>
+        <script src="old_popup.js">
+
+        </script>
     </body>
 </html>
