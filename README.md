@@ -1,6 +1,11 @@
 # youtube-video-saver
 A chrome extension that saves youtube shorts
 
+# Notes
+Most of the learning for this was done [here](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world) \
+[Current Progress](https://developer.chrome.com/docs/extensions/get-started/tutorial/scripts-activetab)
+
+
 # Planned Features
 - ### Ability to Save YouTube Videos through a shortcut
 The ability to use a keyboard shortcut (as yet undecided) in order to save YouTube videos or shorts, even when the extension is closed
