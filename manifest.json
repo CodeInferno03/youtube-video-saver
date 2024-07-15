@@ -17,6 +17,7 @@
   "permissions": [
     "tabGroups",
     "activeTab",
-    "storage"
+    "storage",
+    "tabs"
   ]
 }
