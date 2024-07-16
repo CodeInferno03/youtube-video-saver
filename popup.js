@@ -1,59 +1,98 @@
-let jsonData;
+document.addEventListener('DOMContentLoaded', function () {
+    const URL_PATH = "https://www.youtube.com/"
+    // const delay = ms => new Promise(res => setTimeout(res, ms));
 
-fetch('./saveTitle.json').then(response => response.json()).then(data => {
-        jsonData = data;
-    }).catch(error => console.error('Error loading JSON:', error));
-
-
-const URL_PATH = "https://www.youtube.com/"
-
-function refreshTabList() {
-    const tabList = document.getElementById('tabList');
-    tabList.innerHTML = '';
-}
-
-const delay = ms => new Promise(res => setTimeout(res, ms))
-
-// on clicking the button, you get the Title of the Current Tab
-const button = document.querySelector("button");
-button.addEventListener("click", async () => {
-
-    // refreshTabList();
-
-    // gets tab title FUCKING FINALLY
-    // from https://stackoverflow.com/questions/74225476/how-can-i-get-current-tab-title-in-a-chrome-extension
-    const tabTitleOrSomethingIdk = async function getCurrentTab() {
-        let queryOptions = { active: true, lastFocusedWindow: true};
-
-        let [tab] = await chrome.tabs.query(queryOptions);
-        return tab;
+    // pull the previously saved tabs from storage
+    function loadSavedTabs() {
+        chrome.storage.sync.get(['tabs'], function (result) {
+            const tabsList = result.tabs || [];        
+            tabsList.forEach(tab => {
+                createTablistEntry(
+                    tab.id, tab.url, tab.title
+                );
+            });
+    
+        });
     }
 
-    insertTabTitle("hehenewelement");
-    document.getElementById('hehenewelement').innerHTML = (await tabTitleOrSomethingIdk()).title
+    // to ensure that all the tabs actually load before the rest of the stuff happens
+    loadSavedTabs();
 
-    await delay(5000);
+    // to empty the list and storage
+    document.getElementById('deleter').addEventListener('click', async() => {
+        chrome.storage.sync.clear();
 
-    insertTabTitle("trialElement");
-    document.getElementById('trialElement').innerHTML = `test element: ${jsonData[0].name}`;
+        document.getElementById('tabList').innerHTML = '';
+    });
+    
+    // on clicking the button, you get the Title of the Current Tab
+    // and save its title and url to chrome storage
+    const saveButton = document.getElementById("saver");
+    saveButton.addEventListener("click", async () => {
+
+        // gets tab title
+        // from https://stackoverflow.com/questions/74225476/how-can-i-get-current-tab-title-in-a-chrome-extension
+        const getTabInfo = async function getCurrentTab() {
+            let queryOptions = { active: true, lastFocusedWindow: true};
+
+            let [tab] = await chrome.tabs.query(queryOptions);
+            return tab;
+        }
+
+        // generating a unique id for each saved tab
+        const tabId = Date.now().toString();
+        const tabTitle = (await getTabInfo()).title
+        const tabUrl = (await getTabInfo()).url
+
+        // Add the list of tabs to storage
+        chrome.storage.sync.get(['tabs'], function (result) {
+            const tabsList = result.tabs || [];
+            const newTab = {
+                id: tabId,
+                url: tabUrl,
+                title: tabTitle
+            };
+            const updatedTabList = [...tabsList, newTab];
+    
+            chrome.storage.sync.set({ 'tabs': updatedTabList });
+        });
+
+        if (tabUrl.includes(URL_PATH)) {
+            createTablistEntry(tabId, tabUrl, tabTitle);
+            // document.getElementById(tabId).innerHTML = (await getTabInfo()).title
+        }
+    });
+
+    // creates an entry for the newest tab, and adds it to chrome storage
+    function createTablistEntry(elementId, elementUrl, elementTitle) {
+        const tabList = document.getElementById('tabList');
+    
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <p id="${elementId}" ></p>
+            `;
+        tabList.appendChild(listItem);
+
+        document.getElementById(elementId).innerHTML = cleanTitle(elementTitle);
+    
+        // Didn't realise I could put event listeners inside other functions and they would work properly T_T
+        document.getElementById(elementId).addEventListener('click', async () => {
+            chrome.tabs.create({
+                url: elementUrl
+            });
+        });
+    }
+
+    // to remove the " - YouTube" suffix from every title
+    function cleanTitle(elementTitle) {
+        const suffix = " - YouTube";
+        if (elementTitle.endsWith(suffix)) {
+            return elementTitle.slice(0, -suffix.length).trim();
+        }
+
+        return elementTitle
+    }
+
 });
 
-function insertTabTitle(elementName) {
-    const tabList = document.getElementById('tabList');
-    // tabList.innerHTML = '';
-
-    const listItem = document.createElement('li');
-    listItem.innerHTML = `
-        <p id="${elementName}"> </p>
-        `;
-    tabList.appendChild(listItem);
-}
-
-
-// Creates a new tab with the given url
-function openTab(url) {
-    chrome.tabs.create({
-        url: url
-    });
-}
-    
+  

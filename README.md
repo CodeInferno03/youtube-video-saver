@@ -22,7 +22,7 @@ The ability to add a little blurb under each saved video, only a few words (like
 The ability to search for specific content
 
 # Finished Features
-None Yet D:
+- ### Ability to view saved videos in a list format
 
 
 # Contributor(s)
