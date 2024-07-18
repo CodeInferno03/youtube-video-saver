@@ -1,3 +1,8 @@
+// Initialie Background Page
+chrome.runtime.getBackgroundPage9(function (backgroundPage) {
+    console = backgroundPage.console
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     const URL_PATH = "https://www.youtube.com/"
     // const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -18,13 +23,23 @@ document.addEventListener('DOMContentLoaded', function () {
     // to ensure that all the tabs actually load before the rest of the stuff happens
     loadSavedTabs();
 
+    // takes a message from the background.js script to save a video using a keyboard shortcut
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.action === 'save_video') {
+            document.getElementById('ext_title').innerHTML = 'Got Message!'
+            loadSavedTabs();
+            document.getElementById('saver').click();
+        }
+    });
+
     // to empty the list and storage
     document.getElementById('deleter').addEventListener('click', async() => {
         chrome.storage.sync.clear();
 
         document.getElementById('tabList').innerHTML = '';
     });
-    
+
+   
     // on clicking the button, you get the Title of the Current Tab
     // and save its title and url to chrome storage
     const saveButton = document.getElementById("saver");

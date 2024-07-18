@@ -8,6 +8,17 @@ A lot of the logic for this is based on [Chrome Extension Documentation](https:/
 \
 Some of the elements of the code come from [here](https://www.geeksforgeeks.org/create-a-chrome-extension-in-html-css-javascript/) too
 
+# USAGE GUIDE
+This extension requires storage, tabs, and active tab permissions in order to run. The main purpose of the extension is to
+save YouTube Videos and Shorts, and make them easily accessible in the future. It saves them in a list form, where clicking
+on any of the saved ones will open a window navigated to them. \
+In order to save a video, please follow the steps below
+- First, ensure that the tab you are on is a YouTube tab (its url must start with https://www.youtube.com/ or just youtube.com/)
+- You can open the extension either by clicking the extension button on the top right of the screen (the button which looks like a puzzle piece), or by using the keyboard shortcuts `Ctrl+Shift+Y` for Windows, and `Cmd+Shift+Y` for MacOS.
+- Once you open the extension, you can click the "Save Video" button in order to save the details of the current tab you are on. 
+- Currently, there is no option to delete a single video from the list, but clicking "Delete All" will empty the list out.
+- Once you click the Save Video button, you should see the video you just saved get added to the list. Clicking it in the list will navigate to that video.
+
 
 # Planned Features
 - ### Ability to Save YouTube Videos through a shortcut
