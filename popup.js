@@ -1,7 +1,3 @@
-// Initialie Background Page
-chrome.runtime.getBackgroundPage9(function (backgroundPage) {
-    console = backgroundPage.console
-});
 
 document.addEventListener('DOMContentLoaded', function () {
     const URL_PATH = "https://www.youtube.com/"
@@ -59,6 +55,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const tabTitle = (await getTabInfo()).title
         const tabUrl = (await getTabInfo()).url
 
+        let urlExistsFlag = false;
+    
         // Add the list of tabs to storage
         chrome.storage.sync.get(['tabs'], function (result) {
             const tabsList = result.tabs || [];
@@ -67,24 +65,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 url: tabUrl,
                 title: tabTitle
             };
-            const updatedTabList = [...tabsList, newTab];
-    
-            chrome.storage.sync.set({ 'tabs': updatedTabList });
+
+            // checks that the user is not trying to save the same video twice
+            for (const tabData of tabsList) {
+                if (tabData.url === tabUrl) {
+                    urlExistsFlag = true;
+                    break;
+                }
+            }
+
+            if (!urlExistsFlag) {
+                const updatedTabList = [...tabsList, newTab];
+                chrome.storage.sync.set({ 'tabs': updatedTabList });
+
+                if (tabUrl.includes(URL_PATH)) {
+                    createTablistEntry(tabId, tabUrl, tabTitle);
+                    // document.getElementById(tabId).innerHTML = (await getTabInfo()).title
+                }
+            }
         });
 
-        if (tabUrl.includes(URL_PATH)) {
-            createTablistEntry(tabId, tabUrl, tabTitle);
-            // document.getElementById(tabId).innerHTML = (await getTabInfo()).title
-        }
+
+            
+
+        
     });
 
     // creates an entry for the newest tab, and adds it to chrome storage
     function createTablistEntry(elementId, elementUrl, elementTitle) {
         const tabList = document.getElementById('tabList');
     
-        const listItem = document.createElement('li');
+        const listItem = document.createElement('div');
         listItem.innerHTML = `
-            <p id="${elementId}" ></p>
+            <li class="tabListElement">
+                <p id="${elementId}" class"tabListTextHolder"></p>
+            </li>
             `;
         tabList.appendChild(listItem);
 

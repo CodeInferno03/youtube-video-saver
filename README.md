@@ -8,7 +8,7 @@ A lot of the logic for this is based on [Chrome Extension Documentation](https:/
 \
 Some of the elements of the code come from [here](https://www.geeksforgeeks.org/create-a-chrome-extension-in-html-css-javascript/) too
 
-# USAGE GUIDE
+# Usage Guide
 This extension requires storage, tabs, and active tab permissions in order to run. The main purpose of the extension is to
 save YouTube Videos and Shorts, and make them easily accessible in the future. It saves them in a list form, where clicking
 on any of the saved ones will open a window navigated to them. \
