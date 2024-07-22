@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube video and short saver",
+  "description": "An extension that saves YouTube videos and shorts in a list, for easy access in the future",
   "version": "1.0",
   "icons": {
     "16": "images/icon-16.png",

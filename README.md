@@ -1,5 +1,5 @@
 # youtube-video-saver
-A chrome extension that saves youtube shorts
+A chrome extension that can save YouTube videos and shorts
 
 # Notes
 A lot of the logic for this is based on [Chrome Extension Documentation](https://developer.chrome.com/docs/extensions/get-started), specifically
@@ -21,19 +21,23 @@ In order to save a video, please follow the steps below
 
 
 # Planned Features
-- ### Ability to Save YouTube Videos through a shortcut
-The ability to use a keyboard shortcut (`Ctrl+Shift+Y`, `Cmd+Shift+Y` for MacOS) in order to save YouTube videos or shorts, even when the extension is closed
-- ### Ability to view saved videos in a list format
-The ability to view the saved videos in a list format. Each entry will have the video title, as well as the date it was saved. On clicking an entry, it would redirect to the video in the browser. I plan to save the video thumbnail too, but that will depend on whether I am able to implement it or not
-- ### Stretch Feature - Ability to sort by channel
-The ability to sort the videos by channel rather than the default (which is by date saved)
-- ### Stretch Feature - Ability to add some notes about each video
-The ability to add a little blurb under each saved video, only a few words (likely not more than 30-40)
+- ### Ability to delete a single list entry
+Exactly what it sounds like. This feature is in development as I am trying to decide what the best way for it to look is
+- ### Ability to optionally give each video a title
+The ability to decide what the video should be saved as in the list, rather than saving the video title by default. Useful if you have a little note about what in the video is interesting
 - ### Stretch Feature - Ability to search for a video or short
-The ability to search for specific content
+The ability to search for specific content in the list
+- ### Ability to export list JSON
+The ability to click a button, and have the entire dataset of the list be outputted as a JSON file. Useful for people switching machines who want to keep their saved data.
+
+# In-progress Features
+- Ability to delete a single entry from the list
+- Ability to trigger the save using the keyboard shortcut
 
 # Finished Features
 - ### Ability to view saved videos in a list format
+- ### Ability to open the extension using Keyboard commands
+I haven't quite added the ability to directly save, but you can now open the extension using the keyboard command `Ctrl+Shift+Y`, `Cmd+Shift+Y` for MacOS
 
 
 # Contributor(s)

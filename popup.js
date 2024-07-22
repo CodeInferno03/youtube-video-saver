@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const URL_PATH = "https://www.youtube.com/"
     // const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -56,39 +55,35 @@ document.addEventListener('DOMContentLoaded', function () {
         const tabUrl = (await getTabInfo()).url
 
         let urlExistsFlag = false;
-    
-        // Add the list of tabs to storage
-        chrome.storage.sync.get(['tabs'], function (result) {
-            const tabsList = result.tabs || [];
-            const newTab = {
-                id: tabId,
-                url: tabUrl,
-                title: tabTitle
-            };
-
-            // checks that the user is not trying to save the same video twice
-            for (const tabData of tabsList) {
-                if (tabData.url === tabUrl) {
-                    urlExistsFlag = true;
-                    break;
-                }
-            }
-
-            if (!urlExistsFlag) {
-                const updatedTabList = [...tabsList, newTab];
-                chrome.storage.sync.set({ 'tabs': updatedTabList });
-
-                if (tabUrl.includes(URL_PATH)) {
-                    createTablistEntry(tabId, tabUrl, tabTitle);
-                    // document.getElementById(tabId).innerHTML = (await getTabInfo()).title
-                }
-            }
-        });
-
-
-            
-
         
+        if (tabUrl.includes(URL_PATH)) {  
+            // Add the list of tabs to storage
+            chrome.storage.sync.get(['tabs'], function (result) {
+                const tabsList = result.tabs || [];
+                const newTab = {
+                    id: tabId,
+                    url: tabUrl,
+                    title: tabTitle
+                };
+
+                // checks that the user is not trying to save the same video twice
+                for (const tabData of tabsList) {
+                    if (tabData.url === tabUrl) {
+                        urlExistsFlag = true;
+                        alert("Video already saved!");
+                        break;
+                    }
+                }
+
+                if (!urlExistsFlag) {
+                    const updatedTabList = [...tabsList, newTab];
+                    chrome.storage.sync.set({ 'tabs': updatedTabList });
+
+                    createTablistEntry(tabId, tabUrl, tabTitle);
+                    // document.getElementById(tabId).innerHTML = (await getTabInfo()).title  
+                }
+            });
+        }        
     });
 
     // creates an entry for the newest tab, and adds it to chrome storage
