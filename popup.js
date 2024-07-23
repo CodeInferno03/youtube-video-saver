@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const saveButton = document.getElementById("saver");
     saveButton.addEventListener("click", async () => {
 
-        // gets tab title
         // from https://stackoverflow.com/questions/74225476/how-can-i-get-current-tab-title-in-a-chrome-extension
         const getTabInfo = async function getCurrentTab() {
             let queryOptions = { active: true, lastFocusedWindow: true};
@@ -79,8 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const updatedTabList = [...tabsList, newTab];
                     chrome.storage.sync.set({ 'tabs': updatedTabList });
 
-                    createTablistEntry(tabId, tabUrl, tabTitle);
-                    // document.getElementById(tabId).innerHTML = (await getTabInfo()).title  
+                    createTablistEntry(tabId, tabUrl, tabTitle); 
                 }
             });
         }        
