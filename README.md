@@ -4,7 +4,7 @@ A chrome extension that can save YouTube videos and shorts
 # Privacy Policy
 This extension collects some data in order to function, including:
 - Tab data such as the title and url of the current tab
-- YouTube data such as the title and link to the video being watched, and also saves the title and url should the user decide to save it in the list
+- YouTube data such as the title and link to the video being watched, and also saves the title and url should the user decide to save it in the list \
 This information is only used for the purpose of putting the data in the list when saved, and to open tabs with the selected list entry when clicked.
 This information is never shared with any external party, nor is it visible to me when the extension is used by any user.
 No data is ever transferred in any way, and no sensitive data like usernames, passwords, and personal data is ever collected.
