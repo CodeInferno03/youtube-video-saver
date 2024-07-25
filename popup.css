@@ -3,11 +3,28 @@ body {
   margin: 0;
   padding: 0;
 }
-  
+
+.inputContainer {
+  padding-top: 2px;
+  padding-left: 4px;
+  margin: 5px;
+  width: 100%;
+  border-width: 30%;
+  align-content: center;
+}
+
+input[type="text"] {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  width: 90%;
+  border-width: 30%;
+  padding: 10px;
+}
+
 ul {
   list-style-type: none;
   padding-inline-start: 0;
-  max-height: 150px;
+  max-height: 250px;
   overflow-y: auto;
 }
 
@@ -20,7 +37,7 @@ li {
   text-align: center;
   padding: 15px;
   font-size: 1em;
-  width: 20rem;
+  width: 25rem;
 }
 
 .tabListElement:hover {
@@ -47,6 +64,7 @@ h3{
 
 .buttonHolder {
   margin-top: 10px;
+  width: 100%;
 }
 
 /* button-6 from https://getcssscan.com/css-buttons-examples */
@@ -76,7 +94,7 @@ button {
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: baseline;
-  width: 10rem;
+  width: 30%;
 }
 
 button:hover,

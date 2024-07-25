@@ -7,8 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.sync.get(['tabs'], function (result) {
             const tabsList = result.tabs || [];        
             tabsList.forEach(tab => {
+
+                if (!('customTitle' in tab)) {
+                    tab.customTitle = null;
+                }
+
                 createTablistEntry(
-                    tab.id, tab.url, tab.title
+                    tab.id, tab.url, tab.title, tab.customTitle
                 );
             });
     
@@ -39,10 +44,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // and save its title and url to chrome storage
     const saveButton = document.getElementById("saver");
     saveButton.addEventListener("click", async () => {
+        
 
         // from https://stackoverflow.com/questions/74225476/how-can-i-get-current-tab-title-in-a-chrome-extension
         const getTabInfo = async function getCurrentTab() {
-            let queryOptions = { active: true, lastFocusedWindow: true};
+            let queryOptions = { active: true, lastFocusedWindow: true };
 
             let [tab] = await chrome.tabs.query(queryOptions);
             return tab;
@@ -50,8 +56,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // generating a unique id for each saved tab
         const tabId = Date.now().toString();
-        const tabTitle = (await getTabInfo()).title
-        const tabUrl = (await getTabInfo()).url
+        const tabTitle = (await getTabInfo()).title;
+        const tabUrl = (await getTabInfo()).url;
+        
+        const inputVal = document.getElementById('customTitleInput');
+        const customTitle = inputVal.value == "" ? null : inputVal.value;
 
         let urlExistsFlag = false;
         
@@ -62,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const newTab = {
                     id: tabId,
                     url: tabUrl,
-                    title: tabTitle
+                    title: tabTitle,
+                    customTitle: null,
                 };
 
                 // checks that the user is not trying to save the same video twice
@@ -78,14 +88,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     const updatedTabList = [...tabsList, newTab];
                     chrome.storage.sync.set({ 'tabs': updatedTabList });
 
-                    createTablistEntry(tabId, tabUrl, tabTitle); 
+                    createTablistEntry(tabId, tabUrl, tabTitle, customTitle); 
                 }
             });
-        }        
+        } 
+        
+        inputVal.innerHTML = "";
     });
 
     // creates an entry for the newest tab, and adds it to chrome storage
-    function createTablistEntry(elementId, elementUrl, elementTitle) {
+    function createTablistEntry(elementId, elementUrl, elementTitle, elementCustomTitle) {
         const tabList = document.getElementById('tabList');
     
         const listItem = document.createElement('div');
@@ -94,16 +106,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p id="${elementId}" class"tabListTextHolder"></p>
             </li>
             `;
+        
         tabList.appendChild(listItem);
 
-        document.getElementById(elementId).innerHTML = cleanTitle(elementTitle);
-    
+
+        
+        decideOrChangeTitle(
+            elementId, elementTitle, elementCustomTitle
+        );
+
+
+
         // Didn't realise I could put event listeners inside other functions and they would work properly T_T
         document.getElementById(elementId).addEventListener('click', async () => {
             chrome.tabs.create({
                 url: elementUrl
             });
         });
+        
+    }
+
+    // function that assigns a customTitle if the user uses it, otherwise gives the default title. 
+    // in future will allow users to change already saved content
+    function decideOrChangeTitle(elementId, elementTitle, customTitle) {
+        if (customTitle) {
+            document.getElementById(elementId).innerHTML = customTitle;
+        } else {
+            document.getElementById(elementId).innerHTML = cleanTitle(elementTitle);
+        }
     }
 
     // to remove the " - YouTube" suffix from every title
