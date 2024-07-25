@@ -1,5 +1,6 @@
 # youtube-video-saver
 A chrome extension that can save YouTube videos and shorts
+[Link to Extension](https://chromewebstore.google.com/detail/youtube-video-and-short-s/nnfkkgaiaddnneedlilchlgcdkegkgoh)
 
 # Privacy Policy
 This extension collects some data in order to function, including:
