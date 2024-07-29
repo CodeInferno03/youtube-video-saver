@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // removing it from chrome storage
                 chrome.storage.sync.get(['tabs'], function (result) {
                     const tabsList = result.tabs || [];
-                    const updatedTabs = result.tabs.filter(tab => tab.id !== elementId)
+                    const updatedTabs = tabsList.filter(tab => tab.id !== elementId)
 
                     const filteredTabList = [...updatedTabs];
                     chrome.storage.sync.set({ 'tabs': filteredTabList })
