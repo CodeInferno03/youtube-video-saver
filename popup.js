@@ -2,16 +2,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const URL_PATH = "https://www.youtube.com/"
     // const delay = ms => new Promise(res => setTimeout(res, ms));
 
-    // pull the previously saved tabs from storage
+    /**
+     * Load the previously saved tabs from chrome storage and format them into the list
+     */
     function loadSavedTabs() {
         chrome.storage.sync.get(['tabs'], function (result) {
             const tabsList = result.tabs || [];        
             tabsList.forEach(tab => {
-
-                if (!('customTitle' in tab)) {
-                    tab.customTitle = null;
-                }
-
                 createTablistEntry(
                     tab.id, tab.url, tab.title, tab.customTitle
                 );
@@ -23,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // to ensure that all the tabs actually load before the rest of the stuff happens
     loadSavedTabs();
 
+    // How the hell is this as broken as it is T_T
     // takes a message from the background.js script to save a video using a keyboard shortcut
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         if (message.action === 'save_video') {
@@ -32,21 +30,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // to empty the list and storage
-    document.getElementById('deleter').addEventListener('click', async() => {
+
+    document.getElementById('deleteAll').addEventListener('click', async() => {
         chrome.storage.sync.clear();
 
         document.getElementById('tabList').innerHTML = '';
     });
 
-   
+
     // on clicking the button, you get the Title of the Current Tab
     // and save its title and url to chrome storage
     const saveButton = document.getElementById("saver");
     saveButton.addEventListener("click", async () => {
         
-
-        // from https://stackoverflow.com/questions/74225476/how-can-i-get-current-tab-title-in-a-chrome-extension
+        /**
+         * Function that fetches the data of the active tab.
+         * Link to source code: https://stackoverflow.com/questions/74225476/how-can-i-get-current-tab-title-in-a-chrome-extension
+         * @returns Promise with the data from the active tab
+         */
         const getTabInfo = async function getCurrentTab() {
             let queryOptions = { active: true, lastFocusedWindow: true };
 
@@ -62,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const inputVal = document.getElementById('customTitleInput');
         const customTitle = inputVal.value == "" ? null : inputVal.value;
 
+        // checks if a video already exists in storage
         let urlExistsFlag = false;
         
         if (tabUrl.includes(URL_PATH)) {  
@@ -72,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     id: tabId,
                     url: tabUrl,
                     title: tabTitle,
-                    customTitle: null,
+                    customTitle: customTitle,
                 };
 
                 // checks that the user is not trying to save the same video twice
@@ -96,38 +98,73 @@ document.addEventListener('DOMContentLoaded', function () {
         inputVal.innerHTML = "";
     });
 
-    // creates an entry for the newest tab, and adds it to chrome storage
+    // jumps between deletion and non-deletion mode
+    let deleteModeFlag = false;
+
+    /**
+     * Function that creates a list entry for the tab the user wishes to save. It then saves the tab data
+     * to chrome storage as well. This function also handles list entry deletion
+     * @param {string} elementId The id of the tab to be saved. Created by getting the string version of the current date in unicode
+     * @param {string} elementUrl The URL of the tab to be saved
+     * @param {string} elementTitle The title of the tab to be saved
+     * @param {string} elementCustomTitle Optionally a custom title set by the user to save the video with in the list
+     * @returns {void}
+     */
     function createTablistEntry(elementId, elementUrl, elementTitle, elementCustomTitle) {
         const tabList = document.getElementById('tabList');
     
         const listItem = document.createElement('div');
         listItem.innerHTML = `
             <li class="tabListElement">
-                <p id="${elementId}" class"tabListTextHolder"></p>
+                <p id="${elementId}" class="tabListTextHolder"></p>
             </li>
             `;
         
         tabList.appendChild(listItem);
-
-
         
         decideOrChangeTitle(
             elementId, elementTitle, elementCustomTitle
         );
 
-
-
         // Didn't realise I could put event listeners inside other functions and they would work properly T_T
-        document.getElementById(elementId).addEventListener('click', async () => {
-            chrome.tabs.create({
-                url: elementUrl
-            });
+        document.getElementById(elementId).addEventListener('click', async (event) => {
+            if (deleteModeFlag) {
+                // removing element from list
+                const pElement = event.target;
+                const liElement = pElement.parentElement;
+                liElement.parentElement.removeChild(liElement);
+                
+                // removing it from chrome storage
+                chrome.storage.sync.get(['tabs'], function (result) {
+                    const tabsList = result.tabs || [];
+                    const updatedTabs = result.tabs.filter(tab => tab.id !== elementId)
+
+                    const filteredTabList = [...updatedTabs];
+                    chrome.storage.sync.set({ 'tabs': filteredTabList })
+
+                });
+
+                // restoring to non-deletion mode
+                toggleDeleteMode();
+            } else {  
+                chrome.tabs.create({
+                    url: elementUrl
+                });
+            }
+
         });
+ 
+        document.getElementById("deleteListEntry").addEventListener("click", toggleDeleteMode);
         
     }
 
-    // function that assigns a customTitle if the user uses it, otherwise gives the default title. 
-    // in future will allow users to change already saved content
+    /**
+     * A function that assigns a custom title if the user uses it, otherwise assigns the default tab title
+     * for the list entry.
+     * @param {string} elementId The id of the tab being passed 
+     * @param {string} elementTitle The title of the tab being passed
+     * @param {string} customTitle Optional custom title of the tab being passed. Is either a string or null
+     */
     function decideOrChangeTitle(elementId, elementTitle, customTitle) {
         if (customTitle) {
             document.getElementById(elementId).innerHTML = customTitle;
@@ -136,7 +173,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // to remove the " - YouTube" suffix from every title
+    /**
+     * A function that removes the " - YouTube" suffix from the titles passed to it
+     * @param {string} elementTitle The title from which we need to remove " - YouTube" 
+     * @returns {string} The parsed title without "- YouTube"
+     */
     function cleanTitle(elementTitle) {
         const suffix = " - YouTube";
         if (elementTitle.endsWith(suffix)) {
@@ -144,6 +185,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         return elementTitle
+    }
+
+    /**
+     * A function that toggles whether or not the user is in deletion mode.
+     * If the user is in the mode, it turns the button text red, else the text remains black
+     */
+    function toggleDeleteMode() {
+        deleteModeFlag = !deleteModeFlag;
+
+        if (deleteModeFlag) {
+            document.getElementById('deleteListEntry').style.color = 'red'
+        } else {
+            document.getElementById('deleteListEntry').style.color = 'black'
+        }
     }
 
 });

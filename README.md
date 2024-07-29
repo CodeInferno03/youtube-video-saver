@@ -28,28 +28,25 @@ In order to save a video, please follow the steps below
 - First, ensure that the tab you are on is a YouTube tab (its url must start with https://www.youtube.com/ or just youtube.com/)
 - You can open the extension either by clicking the extension button on the top right of the screen (the button which looks like a puzzle piece), or by using the keyboard shortcuts `Ctrl+Shift+Y` for Windows, and `Cmd+Shift+Y` for MacOS.
 - Once you open the extension, you can click the "Save Video" button in order to save the details of the current tab you are on. 
-- Currently, there is no option to delete a single video from the list, but clicking "Delete All" will empty the list out.
+- To delete any entry in the list, you must first click the "delete" button to enter the deletion mode, then click on the entry you want to remove. When in deletion mode, the text in the delete button will be red, making it easy to tell when it is on. If you accidentally press the button and don't wish to delete anything, clicking the button again will disable deletion mode. To delete all the entries in the list, click "delete all"
 - Once you click the Save Video button, you should see the video you just saved get added to the list. Clicking it in the list will navigate to that video.
 
 
 # Planned Features
-- ### Ability to delete a single list entry
-Exactly what it sounds like. This feature is in development as I am trying to decide what the best way for it to look is
-- ### Ability to optionally give each video a title
-The ability to decide what the video should be saved as in the list, rather than saving the video title by default. Useful if you have a little note about what in the video is interesting
 - ### Stretch Feature - Ability to search for a video or short
 The ability to search for specific content in the list
 - ### Ability to export list JSON
 The ability to click a button, and have the entire dataset of the list be outputted as a JSON file. Useful for people switching machines who want to keep their saved data.
 
 # In-progress Features
-- Ability to delete a single entry from the list
 - Ability to trigger the save using the keyboard shortcut
 
 # Finished Features
 - ### Ability to view saved videos in a list format
 - ### Ability to open the extension using Keyboard commands
 I haven't quite added the ability to directly save, but you can now open the extension using the keyboard command `Ctrl+Shift+Y`, `Cmd+Shift+Y` for MacOS
+- ### Ability to delete a single video
+- ### Ability to set a custom title for saved list entries
 
 
 # Contributor(s)
